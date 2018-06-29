@@ -1,0 +1,1 @@
+py fanli_rate.py -f D:\fanligodata
