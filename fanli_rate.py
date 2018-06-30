@@ -24,7 +24,7 @@ class Export(object):
             ' ORDER BY a."上级对应ID"  ) d '
             ' left join 会员信息 e '
             ' on d."上级对应ID"=e."对应ID" '
-            'where d.counter>=3')
+            ' order by d.counter desc ')
         results = cursor.execute(sql)
         all_tixian = results.fetchall()
         allfields = []

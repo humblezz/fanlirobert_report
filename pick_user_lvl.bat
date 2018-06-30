@@ -1,1 +1,0 @@
-py user_lvl_report.py -f D:\fanligodata
