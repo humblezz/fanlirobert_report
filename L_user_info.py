@@ -15,38 +15,7 @@ class Export(object):
         conn = sqlite3.connect(db_path)
         # '''创建游标'''
         cursor = conn.cursor()
-        sql = ( 
-            ' SELECT datetime( s."时间", "unixepoch", "localtime" ) AS "下线绑定时间",'
-            ' c."微信名字" AS "上级微信",'
-            ' s."上级对应ID",'
-            ' c."推广奖励" as "上级推广奖励",'
-            ' datetime( c."注册时间", "unixepoch", "localtime" ) AS "上级注册时间",'
-            ' s."下级对应ID",'
-            ' d."微信名字" AS "下级微信", '
-            ' d."推广奖励" as "下级推广奖励",'
-            ' datetime( d."注册时间", "unixepoch", "localtime" ) AS "下级注册时间",'
-            ' c."总成功订单" AS "上级总成功订单",'
-            ' c."总提现金额" AS "上级总提现金额",'
-            ' d."总成功订单" AS "下级总成功订单",'
-            ' d."总提现金额" AS "下级总提现金额",'
-            ' datetime( b."时间", "unixepoch", "localtime" ) AS "下级订单时间",'
-            ' b."商品ID" as "下级购买商品ID",'
-            ' b."付费金额" as "下级付费金额" , '
-            ' b."买家佣金" as "下级买家佣金",'
-            ' b."推广佣金" as "下级推广佣金",'
-            ' b."商品标题",'
-            ' b."订单编号",'
-            ' b."联盟佣金比例",'
-            ' b."联盟佣金",'
-            ' b."预计收入" as "下级预计收入",'
-            ' b."状态" as "订单状态",'
-            ' b."类目" AS "购物平台" '
-            ' FROM 上下级管理 s '
-            ' LEFT JOIN 订单管理 b ON s."下级对应ID" = b."对应ID" '
-            ' LEFT JOIN 会员信息 c ON s."上级对应ID" = c."对应ID" ' 
-            ' LEFT JOIN 会员信息 d ON s."下级对应ID" = d."对应ID" '
-            ' ORDER BY s."上级对应ID", '
-            ' b."对应ID"'	)
+        sql = ('select datetime( a."时间", "unixepoch", "localtime" ) as "下级绑定时间",b.*  from 上下级管理 a left join 会员信息 b on a."下级对应ID"=b."对应ID"')
         # print(sql)
         results = cursor.execute(sql)
         all_tixian = results.fetchall()
@@ -62,7 +31,7 @@ class Export(object):
 
     # 写入excel
     def write_excel(self, folder_path, data):
-        filename = folder_path + '_L_User_orders_' + filetime + '_.xls'
+        filename = folder_path + '_L_User_info_' + filetime + '_.xls'
         wb = xlwt.Workbook()
         sheet = wb.add_sheet(filetime)
         for i in range(0, len(data)):
